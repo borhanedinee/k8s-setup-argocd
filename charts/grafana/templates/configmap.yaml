@@ -28,7 +28,7 @@ data:
         isDefault: {{ .Values.datasources.prometheus.isDefault }}
         editable: true
         jsonData:
-          timeInterval: "{{ .Values.scrapeConfig.globalScrapeInterval | default "15s" }}"
+          timeInterval: "15s"
       {{- end }}
 
   # -------------------------------------------------------
