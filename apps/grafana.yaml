@@ -26,8 +26,7 @@ spec:
       values: |
         namespace: monitoring
         persistence:
-          enabled: true
-          size: 2Gi
+          enabled: false
         datasources:
           prometheus:
             enabled: true
