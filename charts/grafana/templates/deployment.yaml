@@ -82,11 +82,11 @@ spec:
             failureThreshold: 3
           volumeMounts:
             - name: grafana-provisioning
-              mountPath: /etc/grafana/provisioning/datasources
+              mountPath: /etc/grafana/provisioning/datasources/datasources.yaml
               subPath: datasources.yaml
               readOnly: true
             - name: grafana-provisioning
-              mountPath: /etc/grafana/provisioning/dashboards
+              mountPath: /etc/grafana/provisioning/dashboards/dashboardproviders.yaml
               subPath: dashboardproviders.yaml
               readOnly: true
             - name: grafana-data
