@@ -91,9 +91,6 @@ spec:
               readOnly: true
             - name: grafana-data
               mountPath: /var/lib/grafana
-            - name: grafana-dashboards
-              mountPath: /var/lib/grafana/dashboards
-              readOnly: true
 
       volumes:
         - name: grafana-provisioning
@@ -106,10 +103,6 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
-        # Dashboard JSON files — add your own ConfigMaps with dashboard JSON here
-        # by adding more items to this projected volume
-        - name: grafana-dashboards
-          emptyDir: {}
 
       {{- with .Values.nodeSelector }}
       nodeSelector:
