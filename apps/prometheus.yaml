@@ -13,13 +13,13 @@ metadata:
     app.kubernetes.io/part-of: monitoring-stack
   # Cascade delete — removing this Application will also remove all K8s resources it created
   finalizers:
-    - resources-finalizer.argocd.argoproj.io
+  - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
 
   source:
     # !! Update repoURL to your actual Git repository URL !!
-    repoURL: https://github.com/YOUR_ORG/k8s-config-argocd.git
+    repoURL: https://github.com/borhanedinee/k8s-setup-argocd.git
     targetRevision: HEAD
     path: charts/prometheus
     helm:
@@ -37,12 +37,12 @@ spec:
 
   syncPolicy:
     automated:
-      prune: true       # Remove resources no longer in Git
-      selfHeal: true    # Revert manual changes to match Git state
+      prune: true # Remove resources no longer in Git
+      selfHeal: true # Revert manual changes to match Git state
     syncOptions:
-      - CreateNamespace=true          # Create the namespace if it doesn't exist
-      - ServerSideApply=true          # Use server-side apply to avoid annotation conflicts
-      - ApplyOutOfSyncOnly=true       # Only apply resources that are out of sync
+    - CreateNamespace=true # Create the namespace if it doesn't exist
+    - ServerSideApply=true # Use server-side apply to avoid annotation conflicts
+    - ApplyOutOfSyncOnly=true # Only apply resources that are out of sync
     retry:
       limit: 5
       backoff:

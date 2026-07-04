@@ -12,13 +12,13 @@ metadata:
   labels:
     app.kubernetes.io/part-of: monitoring-stack
   finalizers:
-    - resources-finalizer.argocd.argoproj.io
+  - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
 
   source:
     # !! Update repoURL to your actual Git repository URL !!
-    repoURL: https://github.com/YOUR_ORG/k8s-config-argocd.git
+    repoURL: https://github.com/borhanedinee/k8s-setup-argocd.git
     targetRevision: HEAD
     path: charts/grafana
     helm:
@@ -43,9 +43,9 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=true
-      - ServerSideApply=true
-      - ApplyOutOfSyncOnly=true
+    - CreateNamespace=true
+    - ServerSideApply=true
+    - ApplyOutOfSyncOnly=true
     retry:
       limit: 5
       backoff:
