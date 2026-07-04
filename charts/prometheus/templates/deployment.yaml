@@ -32,15 +32,6 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 
-      # Chown the data directory so the prometheus user (65534) can write to it
-      initContainers:
-        - name: chown-data
-          image: busybox:1.36
-          command: ["sh", "-c", "chown -R 65534:65534 /prometheus"]
-          volumeMounts:
-            - name: prometheus-data
-              mountPath: /prometheus
-
       containers:
         - name: prometheus
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
