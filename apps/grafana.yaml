@@ -1,0 +1,54 @@
+# ArgoCD Application — Grafana
+# Apply this manifest to your ArgoCD namespace to register Grafana
+# as a synced application.
+#
+# kubectl apply -f apps/grafana.yaml -n argocd
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grafana
+  namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: monitoring-stack
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+
+  source:
+    # !! Update repoURL to your actual Git repository URL !!
+    repoURL: https://github.com/YOUR_ORG/k8s-config-argocd.git
+    targetRevision: HEAD
+    path: charts/grafana
+    helm:
+      releaseName: grafana
+      values: |
+        namespace: monitoring
+        persistence:
+          enabled: true
+          size: 2Gi
+        datasources:
+          prometheus:
+            enabled: true
+            url: "http://prometheus.monitoring.svc.cluster.local:9090"
+            isDefault: true
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+      - ApplyOutOfSyncOnly=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m

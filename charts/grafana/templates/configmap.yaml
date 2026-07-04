@@ -1,0 +1,49 @@
+{{- /*
+  configmap.yaml — Grafana provisioning configuration.
+  Two keys:
+    datasources.yaml  — auto-provisions Prometheus as the default datasource
+    dashboardproviders.yaml — tells Grafana where to find dashboard JSON files
+*/}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-provisioning
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+data:
+  # -------------------------------------------------------
+  # Datasource provisioning
+  # -------------------------------------------------------
+  datasources.yaml: |
+    apiVersion: 1
+    datasources:
+      {{- if .Values.datasources.prometheus.enabled }}
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: {{ .Values.datasources.prometheus.url }}
+        isDefault: {{ .Values.datasources.prometheus.isDefault }}
+        editable: true
+        jsonData:
+          timeInterval: "{{ .Values.scrapeConfig.globalScrapeInterval | default "15s" }}"
+      {{- end }}
+
+  # -------------------------------------------------------
+  # Dashboard provider — watches /var/lib/grafana/dashboards
+  # Mount dashboard JSON files into that path via another ConfigMap
+  # -------------------------------------------------------
+  dashboardproviders.yaml: |
+    apiVersion: 1
+    providers:
+      - name: default
+        orgId: 1
+        folder: ''
+        type: file
+        disableDeletion: false
+        updateIntervalSeconds: 30
+        allowUiUpdates: true
+        options:
+          path: /var/lib/grafana/dashboards

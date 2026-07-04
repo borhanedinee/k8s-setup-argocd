@@ -1,0 +1,11 @@
+{{- /*
+  namespace.yaml — creates the monitoring namespace if it doesn't already exist.
+  ArgoCD will manage this resource.
+*/}}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/part-of: monitoring-stack

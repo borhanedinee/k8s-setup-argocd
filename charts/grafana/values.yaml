@@ -1,0 +1,64 @@
+# -----------------------------------------------------------------
+# Grafana Helm Chart — values.yaml
+# -----------------------------------------------------------------
+
+namespace: monitoring
+
+image:
+  repository: grafana/grafana
+  tag: "10.4.2"
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 250m
+    memory: 512Mi
+
+service:
+  type: NodePort
+  port: 3000
+  nodePort: 30030  # Access: http://<node-ip>:30030
+
+# Admin credentials — change these before production use!
+admin:
+  user: admin
+  password: admin123  # overridden via Secret
+
+# Persistent storage for Grafana data (sqlite db, plugins)
+persistence:
+  enabled: true
+  storageClass: ""   # leave empty to use cluster default
+  size: 2Gi
+  accessMode: ReadWriteOnce
+
+# Prometheus datasource — points at the Prometheus NodePort service
+datasources:
+  prometheus:
+    enabled: true
+    # Use the ClusterIP service name for in-cluster access (not the NodePort)
+    url: "http://prometheus.monitoring.svc.cluster.local:9090"
+    isDefault: true
+
+# Dashboard provisioning from ConfigMaps
+dashboardProviders:
+  enabled: true
+
+serviceAccount:
+  create: true
+  name: grafana
+
+# Pod security context
+podSecurityContext:
+  fsGroup: 472
+  runAsUser: 472
+  runAsNonRoot: true
+
+# Node scheduling
+nodeSelector: {}
+tolerations: []
+affinity: {}

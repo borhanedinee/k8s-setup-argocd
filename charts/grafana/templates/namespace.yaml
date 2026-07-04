@@ -1,0 +1,11 @@
+{{- /*
+  namespace.yaml — creates the monitoring namespace (shared with Prometheus).
+  ArgoCD sync-wave annotation ensures the namespace is created before other resources.
+*/}}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/part-of: monitoring-stack

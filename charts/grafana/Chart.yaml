@@ -1,0 +1,12 @@
+apiVersion: v2
+name: grafana
+description: A Helm chart for deploying Grafana on Kubernetes with NodePort exposure
+type: application
+version: 0.1.0
+appVersion: "10.4.2"
+keywords:
+  - grafana
+  - monitoring
+  - dashboards
+maintainers:
+  - name: platform-team
